@@ -1,0 +1,64 @@
+@startuml APIResult
+skinparam sequence{
+    ParticipantBackgroundColor #A7BEAE
+    LifeLineBackgroundColor #E7E8D1
+    LifeLineBorderColor #2C5F2D
+    ActorBackgroundColor #FC766AFF
+    ActorBorderColor #FC766AFF
+    ArrowColor #B85042
+    ArrowFontColor #234E70
+}
+
+title APIServiceResult
+hide footbox
+autonumber
+Caller -> ServiceResult : Invokes getAPIServiceResult(Response response)
+activate Caller
+activate ServiceResult
+alt#6883BC #FCF6F5 TRY
+    ServiceResult -> ServiceResult: Initialize two variables "message" & "content"
+    alt#6883BC #FCF6F5 TRY
+        ServiceResult -> ServiceResult: deserialize the response body and store in content
+        alt#6883BC #FCF6F5 TRY
+            ServiceResult -> ServiceResult: Assign the content's message as message
+        else #efbbbb CATCH
+            ServiceResult -> ServiceResult: Assign empty string as message
+        end
+    else #efbbbb CATCH
+        ServiceResult -> Caller : return the ServiceResult with StatusCode as\n statusCode, message as execption message and \n content as content.
+        note right
+            Invoke the resolveStatusCode method
+            and pass the response's statusCode as params
+            to get the statusCode.
+        end note
+    end
+    ServiceResult -> Caller : return the ServiceResult with StatusCode as\n statusCode, message as execption message and \n content as content.
+    note right
+        Invoke the resolveStatusCode method
+        and pass the response's statusCode as params
+        to get the statusCode.
+    end note
+else #efbbbb CATCH
+    ServiceResult -> Caller : return the ServiceResult with StatusCode as \n SystemException, message as execption message and \n content as null.
+    deactivate ServiceResult
+    deactivate Caller
+end
+
+newpage Getting StatusCode
+autonumber
+hide footbox
+Caller -> ServiceResult: resolveStatus(int statusCode)
+activate Caller
+activate ServiceResult
+alt#6883BC #FCF6F5 TRY
+    ServiceResult -> Caller : return StatusCode
+    note right of  ServiceResult
+        check the statusCode with the
+        existing enum to get the ServiceStatus
+    end note
+else #efbbbb
+    ServiceResult -> Caller : return ServiceStatus.SystemException
+    deactivate ServiceResult
+    deactivate Caller
+end
+@enduml

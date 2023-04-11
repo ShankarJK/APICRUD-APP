@@ -1,0 +1,34 @@
+@startuml NetworkCheck
+skinparam sequence{
+    ParticipantBackgroundColor #A7BEAE
+    LifeLineBackgroundColor #E7E8D1
+    LifeLineBorderColor #2C5F2D
+    ActorBackgroundColor #FC766AFF
+    ActorBorderColor #FC766AFF
+    ArrowColor #B85042
+    ArrowFontColor #234E70
+}
+
+title Network Check
+autonumber
+hide footbox
+Caller -> NetworkCheck: invokes checkInternetConnectivity()
+activate Caller
+activate NetworkCheck
+alt
+    NetworkCheck -> NetworkCheck: invokes InternetConnectionChecker().hasConnection\n and store the result.
+    alt#6883BC #FCF6F5 result == true
+        NetworkCheck --> Caller: Returns true
+    else #efbbbb result ==false
+        NetworkCheck --> Caller : Returns false
+    end
+else
+    NetworkCheck -> ExceptionHandling: invokes writeExceptionData()
+    activate ExceptionHandling
+    ExceptionHandling --> NetworkCheck: Returns
+    deactivate ExceptionHandling
+    NetworkCheck --> Caller: Returns false
+    deactivate NetworkCheck
+    deactivate Caller
+end
+@enduml

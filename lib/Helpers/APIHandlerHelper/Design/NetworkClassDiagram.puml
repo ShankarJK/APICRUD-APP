@@ -1,0 +1,20 @@
+@startuml Network Class Diagram
+Package Helpers
+{
+    Package ServiceResult{
+        class NetworkCheck{
+            + checkInternetConnectivity():  Future<bool>
+        }
+    }
+}
+
+Package Services{
+    Package UserService{
+        interface IUserService{
+            +  getUserInfo():Future<ServiceResult<UserInfoBO>>
+        }
+    }
+}
+
+UserService -->NetworkCheck
+@enduml
