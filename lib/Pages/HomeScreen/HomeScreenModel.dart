@@ -11,12 +11,15 @@ part 'HomeScreenModel.g.dart';
 // Create a HomeScreenModel
 class HomeScreenModel = _HomeScreenModelBase with _$HomeScreenModel;
 
-abstract class _HomeScreenModelBase with Store ,PopupMixin,TextfieldMixin,NavigationMixin{
+abstract class _HomeScreenModelBase
+    with Store, PopupMixin, TextfieldMixin, NavigationMixin {
+
+  // Create a variable avengerServiceInstance with type as IAvengerService and assign the instance of IAvengerService using GetIt
   final avengerServiceInstance = GetIt.instance.get<IAvengerService>();
 
-  // Create a variable actionstatus with  bool datatype and assign the true to it 
+  // Create a variable actionstatus with  bool datatype and assign the true to it
   bool actionstatus = true;
-  
+
   // Create a variable textvalue with String datatype and assign the empty String to it and make the variable as observable
   @observable
   String textvalue = "";
@@ -25,21 +28,25 @@ abstract class _HomeScreenModelBase with Store ,PopupMixin,TextfieldMixin,Naviga
   @observable
   List<AvengerBO> allAvengers = [];
 
-  // Create a variable isAvengersLoading with  bool datatype and assign the false to it 
+  // Create a variable isAvengersLoading with  bool datatype and assign the false to it
   @observable
   bool isAvengersLoading = false;
 
   /* Declare a method setIsAvengersLoading with required parameter isLoading to assign the value to this.isAvengersLoading */
   @action
-  void setIsAvengersLoading ({required bool isLoading}){
+  void setIsAvengersLoading({required bool isLoading}) {
+    // Assign the value of paramter isLoading to isAvengersLoading
     isAvengersLoading = isLoading;
   }
 
   /* Declare a method setAllAvengers with required parameter newAvengers to assign the value to allAvengers */
   @action
   void setAllAvengers({required List<AvengerBO> newAvengers}) {
+
+    // Assign the value empty list to allAvengers
     allAvengers = [];
+
+    // Assign the value of paramter newAvengers to  allAvengers
     allAvengers = newAvengers;
   }
-  
 }

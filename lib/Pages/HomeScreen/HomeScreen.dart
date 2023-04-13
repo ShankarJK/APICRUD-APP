@@ -9,6 +9,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import '../../Helpers/Mixins/PopupMixin.dart';
 import '../../Helpers/Mixins/TextfieldMixin.dart';
 
+// Create a statefulwidget for HomeScreen
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key, required this.extraData}) : super(key: key);
   final Object extraData;
@@ -46,6 +47,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     backgroundColor: MaterialStatePropertyAll(Colors.blue),
                   ),
                   onPressed: () {
+
                     // Consume the createAvengers and pass the paramter as instance of text editing contoller
                     _homeScreenVM.createAvengers(name: inputvalue.text);
                   },
@@ -55,6 +57,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   style: const ButtonStyle(
                     backgroundColor: MaterialStatePropertyAll(Colors.red),
                   ),
+
+                  // Invoke the closepopups()
                   onPressed: _homeScreenVM.closepopups,
                   child: const Text("Close",
                       style: TextStyle(color: Colors.white))),
@@ -76,15 +80,22 @@ class _HomeScreenState extends State<HomeScreen> {
             contentPadding: const EdgeInsets.all(30),
             content: TextFormField(
               controller: editfield,
+
+              // Invoke the textsend()
               onChanged: (text) => _homeScreenVM.textsend(value: text),
             ),
             actions: [
+
               ElevatedButton(
                   style: const ButtonStyle(
                     backgroundColor: MaterialStatePropertyAll(Colors.blue),
                   ),
                   onPressed: () {
+                    
+                    // Consume the textvalue and assign the text of TextEditingContoller
                     _homeScreenVM.textvalue = editfield.text;
+
+                     // Invoke the editAvenger and pass the parameter as index and values 
                     _homeScreenVM.editAvenger(
                         index: index, values: _homeScreenVM.textvalue);
                   },
@@ -94,6 +105,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   style: const ButtonStyle(
                     backgroundColor: MaterialStatePropertyAll(Colors.red),
                   ),
+
+                  // Invoke the closepopups
                   onPressed: _homeScreenVM.closepopups,
                   child: const Text("Close",
                       style: TextStyle(color: Colors.white))),
@@ -110,20 +123,35 @@ class _HomeScreenState extends State<HomeScreen> {
 
     // Create a listener for popupcontroller to listen the pop actions
     _homeScreenVM.popupcontroller.stream.listen((event) {
+
+      // Checks for the event is Popup
       if (event is Popup) {
+
+        // Invoke the case block according to the value of event.data[1]
         switch (event.data[1]) {
+
+          // checks for the case "showavengerdialog"
           case "showavengerdialog":
             {
+              // Invoke the showavengerdialog()
               showavengerdialog();
+
+              // Checks for the inputvalue.text !=""
               if (inputvalue.text != "") {
+
+                // Assign the empty string to inputvalue.text 
                 inputvalue.text = "";
               }
               break;
             }
+
+          // checks for the case "editavengerdialog"
           case "editavengerdialog":
             {
+              // Invoke the editavengerdialog and pass the parater as index 
               editavengerdialog(index: event.data[0]);
-              // _homeScreenVM.textvalue = _homeScreenVM.allAvengers[event.data[0]].name.toString();
+
+              // Set the text of editfield as allavenger.name based on the index
               editfield.text =
                   _homeScreenVM.allAvengers[event.data[0]].name.toString();
             }
@@ -142,14 +170,20 @@ class _HomeScreenState extends State<HomeScreen> {
 
     // Create a stream listener for textfield form
     _homeScreenVM.usertextcontroller.stream.listen((event) {
+
+      // Checks for the event is Textfield
       if (event is Textfield) {
+
+        // Assign the value to editfield.text 
         editfield.text = event.data;
+
+        // Assign the length of textvalue on TextSelection.collapsed
         editfield.selection =
             TextSelection.collapsed(offset: _homeScreenVM.textvalue.length);
       }
     });
 
-    // invoke the fetchAllAvengers to get all the values from api
+    // Invoke the fetchAllAvengers to get all the values from api
     _homeScreenVM.fetchAllAvengers();
   }
 
@@ -163,6 +197,8 @@ class _HomeScreenState extends State<HomeScreen> {
             padding: const EdgeInsets.only(right: 20.0),
             child: MaterialButton(
               onPressed: () {
+
+                // Invoke the fetchAllAvengers()
                 _homeScreenVM.fetchAllAvengers();
               },
               child: const Icon(Icons.refresh),
@@ -179,6 +215,7 @@ class _HomeScreenState extends State<HomeScreen> {
             builder: (context) {
               return Center(
                 child: Visibility(
+                  // Consume  the value of isAvengersLoading
                   visible: _homeScreenVM.isAvengersLoading,
                   child: const CircularProgressIndicator(),
                 ),
@@ -191,14 +228,19 @@ class _HomeScreenState extends State<HomeScreen> {
           Expanded(
             child: Observer(builder: (context) {
               return Visibility(
+                 // Consume  the value of isAvengersLoading
                 visible: !_homeScreenVM.isAvengersLoading,
                 child: ListView.builder(
+                   // Consume the length of allAvengers
                   itemCount: _homeScreenVM.allAvengers.length,
                   shrinkWrap: true,
                   itemBuilder: (_, index) {
                     return ListTile(
                       leading:
+                       // Consume the id on the collection allAvengers
                           Text(_homeScreenVM.allAvengers[index].id.toString()),
+
+                       // Consume the name on the collection allAvengers
                       title: Text(_homeScreenVM.allAvengers[index].name ?? ""),
                       trailing: SizedBox(
                         width: 100,
@@ -210,6 +252,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   Colors.blue,
                                 )),
                                 onPressed: () {
+                                    // Invoke the editpopdisplay() and pass the index 
                                   _homeScreenVM.editpopdisplay(indexs: index);
                                 },
                                 icon: const Icon(
@@ -223,6 +266,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   Colors.red,
                                 )),
                                 onPressed: () {
+                                   // Invoke the deleteAvenger() and pass the index 
                                   _homeScreenVM.deleteAvenger(indexx: index);
                                 },
                                 icon: const Icon(
@@ -242,8 +286,9 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
+          
+          // Invoke the popdisplayCreate()
           _homeScreenVM.popdisplayCreate();
-          // _homeScreenVM.createAvengers(name: "newaveners");
         },
         child: const Icon(Icons.add_rounded),
       ),
@@ -253,12 +298,16 @@ class _HomeScreenState extends State<HomeScreen> {
   /* Invoke the dispose() */
   @override
   void dispose() {
+
     // Using navigationStream.Close() close the stream
     _homeScreenVM.navigationStream.close();
 
     // Invoke closepopup()
     _homeScreenVM.closepopup();
 
+    // Invoke closeTextController()
+    _homeScreenVM.closeTextController();
+    
     // Invoke super.dispose()
     super.dispose();
   }
