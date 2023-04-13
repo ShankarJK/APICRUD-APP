@@ -37,15 +37,11 @@ class HomeScreenVM extends HomeScreenModel {
   Future<void> createAvengers({required String name}) async {
     // Declare the try block
     try {
-      // Check for the check actionstatus is true
-      if (actionstatus) {
+
         // Invoke the closepopups()
         closepopups();
 
         setIsAvengersLoading(isLoading: true);
-
-        // Assign the value false to the variable actionstatus
-        actionstatus = false;
 
         // Create a instance of AvengerBO and pass the value to the constructor AvengerBO as id and name
         AvengerBO newavenger = AvengerBO(id: null, name: name);
@@ -55,15 +51,6 @@ class HomeScreenVM extends HomeScreenModel {
 
         // Invoke the fetchAllAvengers() and make it as await
         await fetchAllAvengers();
-
-        // Assign the value true to the variable actionstatus
-        actionstatus = true;
-      }
-      // Declare the else conditon
-      else {
-        // Invoke the fetchAllAvengers() and make it as await
-        await fetchAllAvengers();
-      }
     }
     // Declare the catch block with paramter e
     catch (e) {
@@ -76,10 +63,11 @@ class HomeScreenVM extends HomeScreenModel {
   Future<void> editAvenger({required int index, required String values}) async {
     // Declare the try block
     try {
-      // Check for the check actionstatus is true
-      if (actionstatus) {
-        // Assign the value false to the variable actionstatus
-        actionstatus = false;
+     
+       // Invoke the closepopups()
+        closepopups();
+
+        setIsAvengersLoading(isLoading: true);
 
         // Create a instance of AvengerBO and pass the value to the constructor AvengerBO as id and name
         AvengerBO editavenger =
@@ -88,20 +76,8 @@ class HomeScreenVM extends HomeScreenModel {
         // Invoke the editNameOfAvenger() and make it as await, then pass the parameter editavenger
         await avengerServiceInstance.editNameOfAvenger(hero: editavenger);
 
-        // Invoke the closepopups()
-        closepopups();
-
-        // Assign the value true to the variable actionstatus
-        actionstatus = true;
-
         // Invoke the fetchAllAvengers() and make it as await
         await fetchAllAvengers();
-      }
-      // Declare the else block
-      else {
-        // Invoke the fetchAllAvengers() and make it as await
-        await fetchAllAvengers();
-      }
     }
     // Declare the catch block with paramter e
     catch (e) {
@@ -145,7 +121,9 @@ class HomeScreenVM extends HomeScreenModel {
     }
   }
 
+
   /* Create a method named popdisplayCreate() to display the pop for create avenger action avenger Api */
+ 
   void popdisplayCreate() {
     // Declare the try block
     try {
@@ -158,6 +136,7 @@ class HomeScreenVM extends HomeScreenModel {
       e.writeExceptionData();
     }
   }
+
 
   /* Create a method named closepopups() to close the pop */
   void closepopups() {
@@ -188,4 +167,6 @@ class HomeScreenVM extends HomeScreenModel {
       e.writeExceptionData();
     }
   }
+
+
 }
